@@ -10,27 +10,44 @@ namespace RainbowTags.Components
     {
         private Player _player;
         private int _position;
+        private float _interval;
         private int _intervalInFrames;
         private string[] _colors;
         private CoroutineHandle _coroutineHandle;
 
+        public string[] Colors
+        {
+            get => _colors ?? Array.Empty<string>();
+            set
+            {
+                _colors = value ?? Array.Empty<string>();
+                _position = 0;
+            }
+        }
+
+        public float Interval
+        {
+            get => _interval;
+            set
+            {
+                _interval = value;
+                _intervalInFrames = Mathf.CeilToInt(value) * 50;
+            }
+        }
+
         private void Awake()
         {
             _player = Player.Get(gameObject);
-            // TODO: make configurable from the component
-            _intervalInFrames = Mathf.CeilToInt(RainbowTagMod.Instance.Config.TagInterval) * 50;
-            _coroutineHandle = Timing.RunCoroutine(UpdateColor().CancelWith(_player.GameObject));
+        }
+
+        private void Start()
+        {
+            _coroutineHandle = Timing.RunCoroutine(UpdateColor().CancelWith(_player.GameObject).CancelWith(this));
         }
 
         private void OnDestroy()
         {
             Timing.KillCoroutines(_coroutineHandle);
-        }
-
-        public void SetColors(string[] colors)
-        {
-            _colors = colors ?? Array.Empty<string>();
-            _position = 0;
         }
 
         private string RollNext()
