@@ -10,7 +10,11 @@ namespace RainbowTags
 {
     public class RainbowTagMod : Plugin<Config>
     {
-        public override Version RequiredExiledVersion { get; } = new Version(3, 0, 5);
+        public override string Author { get; } = "SirMeepington. Updated by Build";
+        public override string Name { get; } = "RainbowTags";
+        public override string Prefix { get; } = "RT";
+        public override Version Version { get; } = new Version(3, 0, 0);
+        public override Version RequiredExiledVersion { get; } = new Version(4, 0, 0);
 
         public override void OnEnabled()
         {
